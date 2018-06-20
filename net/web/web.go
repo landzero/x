@@ -20,12 +20,15 @@ package web
 import (
 	"io"
 	"log"
+	"net"
 	"net/http"
 	"os"
 	"reflect"
 	"strings"
+	"time"
 
 	"landzero.net/x/com"
+	"landzero.net/x/net/ivy"
 	"landzero.net/x/net/web/inject"
 )
 
@@ -285,6 +288,45 @@ func (m *Web) Run(args ...interface{}) {
 	logger := m.GetVal(reflect.TypeOf(m.logger)).Interface().(*log.Logger)
 	logger.Printf("listening on %s (%s)\n", addr, m.Env())
 	logger.Fatalln(http.ListenAndServe(addr, m))
+}
+
+// RunIvy run the http server with Ivy Protocol
+func (m *Web) RunIvy(args ...string) {
+	logger := m.GetVal(reflect.TypeOf(m.logger)).Interface().(*log.Logger)
+	var address string
+	var registration string
+	if len(args) == 2 {
+		address = args[0]
+		registration = args[1]
+	} else if len(args) == 0 {
+		address = os.Getenv("IVY_ADDRESS")
+		registration = os.Getenv("IVY_REGISTRATION")
+	} else {
+		logger.Fatalln("Web#RunIvy accept 0 or 2 arguments, got", len(args))
+		return
+	}
+	var l net.Listener
+	var err error
+	if l, err = ivy.Listen(
+		"tcp",
+		address,
+		ivy.ListenConfig{
+			Registration: registration,
+			PoolSize:     uint64(com.StrTo(os.Getenv("IVY_POOL_SIZE")).MustInt64()),
+		},
+	); err != nil {
+		logger.Fatalf("failed to create Ivy listener: %v", err)
+		return
+	}
+	s := &http.Server{Handler: m}
+	logger.Printf("listening on ivy(%s) as %s", address, registration)
+	for {
+		if err = s.Serve(l); err == ivy.ErrListenerClosed {
+			break
+		}
+		time.Sleep(1000)
+	}
+	logger.Fatalln(err)
 }
 
 // SetURLPrefix sets URL prefix of router layer, so that it support suburl.
