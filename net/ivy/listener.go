@@ -18,20 +18,18 @@ type listener struct {
 	closed  bool
 }
 
-// ConnCloseCalled implements netext.ConnCloseHook
-func (l *listener) ConnCloseCalled(c net.Conn, first bool) {
-	if first {
-		// decrease count
-		atomic.AddUint64(&l.count, ^uint64(0))
-		// signal the cond
-		l.cond.Signal()
-	}
+// ConnEnded implements netext.ConnEndHook
+func (l *listener) ConnEnded(c net.Conn) {
+	// decrease count
+	atomic.AddUint64(&l.count, ^uint64(0))
+	// signal the cond
+	l.cond.Signal()
 }
 
 func (l *listener) Accept() (c net.Conn, err error) {
 	l.cond.L.Lock()
 	defer l.cond.L.Unlock()
-	// wait until count exceeded or listener closed
+	// wait until count decreased or listener closed
 	for l.count > l.config.PoolSize && !l.closed {
 		l.cond.Wait()
 	}

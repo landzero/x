@@ -305,28 +305,36 @@ func (m *Web) RunIvy(args ...string) {
 		logger.Fatalln("Web#RunIvy accept 0 or 2 arguments, got", len(args))
 		return
 	}
+	if len(address) == 0 {
+		address = "127.0.0.1:8090"
+	}
+	if len(registration) == 0 {
+		registration = "http://localhost/"
+	}
 	var l net.Listener
 	var err error
-	if l, err = ivy.Listen(
-		"tcp",
-		address,
-		ivy.ListenConfig{
-			Registration: registration,
-			PoolSize:     uint64(com.StrTo(os.Getenv("IVY_POOL_SIZE")).MustInt64()),
-		},
-	); err != nil {
-		logger.Fatalf("failed to create Ivy listener: %v", err)
-		return
-	}
-	s := &http.Server{Handler: m}
-	logger.Printf("listening on ivy(%s) as %s", address, registration)
 	for {
-		if err = s.Serve(l); err == ivy.ErrListenerClosed {
-			break
+		if l, err = ivy.Listen(
+			"tcp",
+			address,
+			ivy.ListenConfig{
+				Registration: registration,
+				PoolSize:     uint64(com.StrTo(os.Getenv("IVY_POOL_SIZE")).MustInt64()),
+			},
+		); err != nil {
+			logger.Fatalf("failed to create Ivy listener: %v", err)
+			return
 		}
-		time.Sleep(1000)
+		s := &http.Server{
+			Handler:           m,
+			ReadTimeout:       0,
+			ReadHeaderTimeout: 0,
+			IdleTimeout:       0,
+		}
+		logger.Printf("listening on ivy(%s) as %s", address, registration)
+		s.Serve(l)
+		time.Sleep(2000)
 	}
-	logger.Fatalln(err)
 }
 
 // SetURLPrefix sets URL prefix of router layer, so that it support suburl.
