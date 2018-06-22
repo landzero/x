@@ -74,7 +74,6 @@ func main() {
 
 func printHelp() {
 	println("Minit Test")
-	println("  by Yanke Guo <guoyk.cn@gmail.com>")
 	println("Usage:")
 	flag.PrintDefaults()
 }

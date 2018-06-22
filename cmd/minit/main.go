@@ -16,10 +16,6 @@ func main() {
 	// parse flags
 	flag.StringVar(&sock, "L", "/var/run/minit/minit.sock", "socket file to listen")
 	flag.Parse()
-	if len(sock) == 0 {
-		printHelp()
-		os.Exit(1)
-	}
 	// try remove existing sock file
 	os.Remove(sock)
 	// try create parrent directory
@@ -28,7 +24,7 @@ func main() {
 	var err error
 	var l net.Listener
 	if l, err = net.Listen("unix", sock); err != nil {
-		log.Println("Failed to listen", sock)
+		log.Println("Failed to listen", sock, err)
 		return
 	}
 	log.Println("Listening on", sock)
