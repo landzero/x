@@ -219,7 +219,7 @@ var _ = Describe("Commands", func() {
 		It("Should Command", func() {
 			cmds, err := client.Command().Result()
 			Expect(err).NotTo(HaveOccurred())
-			Expect(len(cmds)).To(BeNumerically("~", 180, 10))
+			Expect(len(cmds)).To(BeNumerically("~", 200, 20))
 
 			cmd := cmds["mget"]
 			Expect(cmd.Name).To(Equal("mget"))
@@ -1935,7 +1935,7 @@ var _ = Describe("Commands", func() {
 
 			sMembersMap := client.SMembersMap("set")
 			Expect(sMembersMap.Err()).NotTo(HaveOccurred())
-			Expect(sMembersMap.Val()).To(Equal(map[string]struct{}{"Hello": {}, "World": {}}))
+			Expect(sMembersMap.Val()).To(Equal(map[string]struct{}{"Hello": struct{}{}, "World": struct{}{}}))
 		})
 
 		It("should SMove", func() {
