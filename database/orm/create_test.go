@@ -107,7 +107,7 @@ type AutoIncrementUser struct {
 }
 
 func TestCreateWithAutoIncrement(t *testing.T) {
-	if dialect := os.Getenv("orm_DIALECT"); dialect != "postgres" {
+	if dialect := os.Getenv("ORM_DIALECT"); dialect != "postgres" {
 		t.Skip("Skipping this because only postgres properly support auto_increment on a non-primary_key column")
 	}
 
@@ -124,15 +124,15 @@ func TestCreateWithAutoIncrement(t *testing.T) {
 	}
 }
 
-func TestCreateWithNoormPrimayKey(t *testing.T) {
-	if dialect := os.Getenv("orm_DIALECT"); dialect == "mssql" {
+func TestCreateWithNoORMPrimayKey(t *testing.T) {
+	if dialect := os.Getenv("ORM_DIALECT"); dialect == "mssql" {
 		t.Skip("Skipping this because MSSQL will return identity only if the table has an Id column")
 	}
 
 	jt := JoinTable{From: 1, To: 2}
 	err := DB.Create(&jt).Error
 	if err != nil {
-		t.Errorf("No error should happen when create a record without a orm primary key. But in the database this primary key exists and is the union of 2 or more fields\n But got: %s", err)
+		t.Errorf("No error should happen when create a record without a ORM primary key. But in the database this primary key exists and is the union of 2 or more fields\n But got: %s", err)
 	}
 }
 

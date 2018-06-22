@@ -36,10 +36,10 @@ type DB struct {
 //     func main() {
 //       db, err := orm.Open("mysql", "user:password@/dbname?charset=utf8&parseTime=True&loc=Local")
 //     }
-// orm has wrapped some drivers, for easier to remember driver's import path, so you could import the mysql driver with
+// ORM has wrapped some drivers, for easier to remember driver's import path, so you could import the mysql driver with
 //    import _ "landzero.net/x/database/orm/dialects/mysql"
 //    // import _ "landzero.net/x/database/orm/dialects/postgres"
-//    // import _ "landzero.net/x/database/orm/dialects/sqlite"
+//    // import _ "landzero.net/x/database/orm/dialects/sqlite3"
 //    // import _ "landzero.net/x/database/orm/dialects/mssql"
 func Open(dialect string, args ...interface{}) (db *DB, err error) {
 	if len(args) == 0 {
@@ -61,6 +61,8 @@ func Open(dialect string, args ...interface{}) (db *DB, err error) {
 		dbSQL, err = sql.Open(driver, source)
 	case SQLCommon:
 		dbSQL = value
+	default:
+		return nil, fmt.Errorf("invalid database source: %v is not a valid type", value)
 	}
 
 	db = &DB{
@@ -110,7 +112,7 @@ func (s *DB) DB() *sql.DB {
 	return db
 }
 
-// CommonDB return the underlying `*sql.DB` or `*sql.Tx` instance, mainly intended to allow coexistence with legacy non-orm code.
+// CommonDB return the underlying `*sql.DB` or `*sql.Tx` instance, mainly intended to allow coexistence with legacy non-ORM code.
 func (s *DB) CommonDB() SQLCommon {
 	return s.db
 }
@@ -491,7 +493,8 @@ func (s *DB) Begin() *DB {
 
 // Commit commit a transaction
 func (s *DB) Commit() *DB {
-	if db, ok := s.db.(sqlTx); ok && db != nil {
+	var emptySQLTx *sql.Tx
+	if db, ok := s.db.(sqlTx); ok && db != nil && db != emptySQLTx {
 		s.AddError(db.Commit())
 	} else {
 		s.AddError(ErrInvalidTransaction)
@@ -501,7 +504,8 @@ func (s *DB) Commit() *DB {
 
 // Rollback rollback a transaction
 func (s *DB) Rollback() *DB {
-	if db, ok := s.db.(sqlTx); ok && db != nil {
+	var emptySQLTx *sql.Tx
+	if db, ok := s.db.(sqlTx); ok && db != nil && db != emptySQLTx {
 		s.AddError(db.Rollback())
 	} else {
 		s.AddError(ErrInvalidTransaction)

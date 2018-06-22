@@ -464,7 +464,7 @@ func TestMultipleIndexes(t *testing.T) {
 }
 
 func TestModifyColumnType(t *testing.T) {
-	if dialect := os.Getenv("orm_DIALECT"); dialect != "postgres" && dialect != "mysql" && dialect != "mssql" {
+	if dialect := os.Getenv("ORM_DIALECT"); dialect != "postgres" && dialect != "mysql" && dialect != "mssql" {
 		t.Skip("Skipping this because only postgres, mysql and mssql support altering a column type")
 	}
 

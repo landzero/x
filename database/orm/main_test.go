@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 	"reflect"
 	"strconv"
+	"strings"
 	"testing"
 	"time"
 
@@ -36,8 +37,8 @@ func init() {
 }
 
 func OpenTestConnection() (db *orm.DB, err error) {
-	dbDSN := os.Getenv("orm_DSN")
-	switch os.Getenv("orm_DIALECT") {
+	dbDSN := os.Getenv("ORM_DSN")
+	switch os.Getenv("ORM_DIALECT") {
 	case "mysql":
 		fmt.Println("testing mysql...")
 		if dbDSN == "" {
@@ -77,6 +78,22 @@ func OpenTestConnection() (db *orm.DB, err error) {
 	db.DB().SetMaxIdleConns(10)
 
 	return
+}
+
+func TestOpen_ReturnsError_WithBadArgs(t *testing.T) {
+	stringRef := "foo"
+	testCases := []interface{}{42, time.Now(), &stringRef}
+	for _, tc := range testCases {
+		t.Run(fmt.Sprintf("%v", tc), func(t *testing.T) {
+			_, err := orm.Open("postgresql", tc)
+			if err == nil {
+				t.Error("Should got error with invalid database source")
+			}
+			if !strings.HasPrefix(err.Error(), "invalid database source:") {
+				t.Errorf("Should got error starting with \"invalid database source:\", but got %q", err.Error())
+			}
+		})
+	}
 }
 
 func TestStringPrimaryKey(t *testing.T) {
@@ -693,7 +710,7 @@ func TestQueryBuilderSubselectInHaving(t *testing.T) {
 
 func DialectHasTzSupport() bool {
 	// NB: mssql and FoundationDB do not support time zones.
-	if dialect := os.Getenv("orm_DIALECT"); dialect == "foundation" {
+	if dialect := os.Getenv("ORM_DIALECT"); dialect == "foundation" {
 		return false
 	}
 	return true
@@ -746,7 +763,7 @@ func TestHstore(t *testing.T) {
 		Bulk postgres.Hstore
 	}
 
-	if dialect := os.Getenv("orm_DIALECT"); dialect != "postgres" {
+	if dialect := os.Getenv("ORM_DIALECT"); dialect != "postgres" {
 		t.Skip()
 	}
 
@@ -821,7 +838,7 @@ func TestCompatibilityMode(t *testing.T) {
 
 func TestOpenExistingDB(t *testing.T) {
 	DB.Save(&User{Name: "jnfeinstein"})
-	dialect := os.Getenv("orm_DIALECT")
+	dialect := os.Getenv("ORM_DIALECT")
 
 	db, err := orm.Open(dialect, DB.DB())
 	if err != nil {

@@ -843,7 +843,7 @@ func TestForeignKey(t *testing.T) {
 }
 
 func testForeignKey(t *testing.T, source interface{}, sourceFieldName string, target interface{}, targetFieldName string) {
-	if dialect := os.Getenv("orm_DIALECT"); dialect == "" || dialect == "sqlite" {
+	if dialect := os.Getenv("ORM_DIALECT"); dialect == "" || dialect == "sqlite" {
 		// sqlite does not support ADD CONSTRAINT in ALTER TABLE
 		return
 	}

@@ -825,7 +825,7 @@ func TestNestedPreload12(t *testing.T) {
 }
 
 func TestManyToManyPreloadWithMultiPrimaryKeys(t *testing.T) {
-	if dialect := os.Getenv("orm_DIALECT"); dialect == "" || dialect == "sqlite" || dialect == "mssql" {
+	if dialect := os.Getenv("ORM_DIALECT"); dialect == "" || dialect == "sqlite" || dialect == "mssql" {
 		return
 	}
 

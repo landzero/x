@@ -72,6 +72,12 @@ func RegisterDialect(name string, dialect Dialect) {
 	dialectsMap[name] = dialect
 }
 
+// GetDialect gets the dialect for the specified dialect name
+func GetDialect(name string) (dialect Dialect, ok bool) {
+	dialect, ok = dialectsMap[name]
+	return
+}
+
 // ParseFieldStructForDialect get field's sql data type
 var ParseFieldStructForDialect = func(field *StructField, dialect Dialect) (fieldValue reflect.Value, sqlType string, size int, additionalType string) {
 	// Get redirected field type
@@ -88,9 +94,9 @@ var ParseFieldStructForDialect = func(field *StructField, dialect Dialect) (fiel
 	fieldValue = reflect.Indirect(reflect.New(reflectType))
 
 	if ormDataType, ok := fieldValue.Interface().(interface {
-		ormDataType(Dialect) string
+		OrmDataType(Dialect) string
 	}); ok {
-		dataType = ormDataType.ormDataType(dialect)
+		dataType = ormDataType.OrmDataType(dialect)
 	}
 
 	// Get scanner's real value
