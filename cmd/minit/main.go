@@ -38,7 +38,6 @@ func main() {
 
 func printHelp() {
 	println("Minit")
-	println("  by Yanke Guo <guoyk.cn@gmail.com>")
 	println("Usage:")
 	flag.PrintDefaults()
 }
