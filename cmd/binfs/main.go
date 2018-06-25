@@ -4,11 +4,12 @@ import (
 	"crypto/sha1"
 	"fmt"
 	"io"
-	"landzero.net/x/log"
 	"os"
 	"path/filepath"
 	"strings"
 	"time"
+
+	"landzero.net/x/log"
 )
 
 // File a file to waiting for processing
@@ -39,8 +40,8 @@ func main() {
 	wds := os.Args[1:]
 	all := []File{}
 	for _, wd := range wds {
-		if strings.HasSuffix(wd, "/") {
-			wd = wd[0 : len(wd)-1]
+		if strings.HasSuffix(wd, string(os.PathSeparator)) {
+			wd = wd[0 : len(wd)-len(string(os.PathSeparator))]
 		}
 		err := filepath.Walk(wd, func(path string, info os.FileInfo, err error) error {
 			_, file := filepath.Split(path)
