@@ -4,7 +4,7 @@ import (
 	"crypto/sha1"
 	"fmt"
 	"io"
-	"log"
+	"landzero.net/x/log"
 	"os"
 	"path/filepath"
 	"strings"

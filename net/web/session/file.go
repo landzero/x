@@ -18,7 +18,7 @@ package session
 import (
 	"fmt"
 	"io/ioutil"
-	"log"
+	"landzero.net/x/log"
 	"os"
 	"path"
 	"path/filepath"

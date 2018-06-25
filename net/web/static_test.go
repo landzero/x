@@ -18,7 +18,7 @@ package web
 import (
 	"bytes"
 	"io/ioutil"
-	"log"
+	"landzero.net/x/log"
 	"net/http"
 	"net/http/httptest"
 	"os"

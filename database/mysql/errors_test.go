@@ -10,7 +10,7 @@ package mysql
 
 import (
 	"bytes"
-	"log"
+	"landzero.net/x/log"
 	"testing"
 )
 

@@ -3,7 +3,7 @@ package toml
 import (
 	"bytes"
 	"fmt"
-	"log"
+	"landzero.net/x/log"
 	"net"
 	"testing"
 	"time"

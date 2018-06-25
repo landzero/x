@@ -11,7 +11,7 @@ package mysql
 import (
 	"errors"
 	"fmt"
-	"log"
+	"landzero.net/x/log"
 	"os"
 )
 

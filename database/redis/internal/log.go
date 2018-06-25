@@ -2,7 +2,7 @@ package internal
 
 import (
 	"fmt"
-	"log"
+	"landzero.net/x/log"
 )
 
 var Logger *log.Logger

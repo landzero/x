@@ -17,7 +17,7 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
-	"log"
+	"landzero.net/x/log"
 	"math"
 	"net"
 	"net/url"

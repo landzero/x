@@ -20,7 +20,7 @@ import (
 	"encoding/hex"
 	"fmt"
 	"io/ioutil"
-	"log"
+	"landzero.net/x/log"
 	"os"
 	"path/filepath"
 	"sync"

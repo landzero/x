@@ -17,7 +17,7 @@ package web
 
 import (
 	"bytes"
-	"log"
+	"landzero.net/x/log"
 	"net/http"
 	"net/http/httptest"
 	"testing"

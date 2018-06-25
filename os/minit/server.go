@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
-	"log"
+	"landzero.net/x/log"
 	"net"
 	"os"
 	"os/exec"

@@ -19,7 +19,7 @@ package web
 
 import (
 	"io"
-	"log"
+	"landzero.net/x/log"
 	"net"
 	"net/http"
 	"os"

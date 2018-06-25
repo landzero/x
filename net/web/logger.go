@@ -16,7 +16,7 @@
 package web
 
 import (
-	"log"
+	"landzero.net/x/log"
 	"reflect"
 	"time"
 )

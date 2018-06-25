@@ -1,6 +1,6 @@
 package orm
 
-import "log"
+import "landzero.net/x/log"
 
 // DefaultCallback default callbacks defined by orm
 var DefaultCallback = &Callback{}

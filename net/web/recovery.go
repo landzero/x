@@ -19,7 +19,7 @@ import (
 	"bytes"
 	"fmt"
 	"io/ioutil"
-	"log"
+	"landzero.net/x/log"
 	"net/http"
 	"runtime"
 

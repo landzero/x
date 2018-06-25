@@ -3,7 +3,7 @@ package redis
 import (
 	"context"
 	"fmt"
-	"log"
+	"landzero.net/x/log"
 	"os"
 	"time"
 

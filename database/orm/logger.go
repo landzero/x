@@ -3,7 +3,7 @@ package orm
 import (
 	"database/sql/driver"
 	"fmt"
-	"log"
+	"landzero.net/x/log"
 	"os"
 	"reflect"
 	"regexp"

@@ -19,7 +19,7 @@ import (
 	"html/template"
 	"io"
 	"io/ioutil"
-	"log"
+	"landzero.net/x/log"
 	"mime/multipart"
 	"net/http"
 	"net/url"

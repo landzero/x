@@ -2,7 +2,7 @@ package yaml_test
 
 import (
 	"fmt"
-	"log"
+	"landzero.net/x/log"
 
 	"landzero.net/x/encoding/yaml"
 )

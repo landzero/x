@@ -2,7 +2,7 @@ package toml
 
 import (
 	"fmt"
-	"log"
+	"landzero.net/x/log"
 	"math"
 	"reflect"
 	"strings"

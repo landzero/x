@@ -2,7 +2,7 @@ package main
 
 import (
 	"flag"
-	"log"
+	"landzero.net/x/log"
 	"net"
 	"os"
 	"path/filepath"

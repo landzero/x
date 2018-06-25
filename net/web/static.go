@@ -17,7 +17,7 @@ package web
 
 import (
 	"encoding/base64"
-	"log"
+	"landzero.net/x/log"
 	"net/http"
 	"path"
 	"path/filepath"
