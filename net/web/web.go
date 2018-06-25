@@ -18,14 +18,17 @@
 package web
 
 import (
+	"crypto/rand"
+	"encoding/hex"
 	"io"
-	"landzero.net/x/log"
 	"net"
 	"net/http"
 	"os"
 	"reflect"
 	"strings"
 	"time"
+
+	"landzero.net/x/log"
 
 	"landzero.net/x/com"
 	"landzero.net/x/net/ivy"
@@ -114,6 +117,14 @@ func validateAndWrapHandlers(handlers []Handler, wrappers ...func(Handler) Handl
 	return wrappedHandlers
 }
 
+func createCrid() string {
+	var buf [8]byte
+	if _, err := rand.Read(buf[:]); err != nil {
+		return "-"
+	}
+	return hex.EncodeToString(buf[:])
+}
+
 // extractCrid extract X-Correlation-ID
 func extractCrid(req *http.Request) (crid string) {
 	crid = strings.TrimSpace(req.Header.Get(CridHeaderName))
@@ -121,7 +132,7 @@ func extractCrid(req *http.Request) (crid string) {
 		crid = strings.TrimSpace(req.URL.Query().Get(CridParamName))
 	}
 	if len(crid) == 0 {
-		crid = "-"
+		crid = createCrid()
 	}
 	return
 }
@@ -130,7 +141,7 @@ func extractCrid(req *http.Request) (crid string) {
 // inject.Injector methods can be invoked to map services on a global level.
 type Web struct {
 	// Env is the environment that Web is executing in.
-	// The MACARON_ENV is read on initialization to set this variable.
+	// The WEB_ENV is read on initialization to set this variable.
 	env string
 
 	inject.Injector
@@ -156,7 +167,7 @@ func NewWithLogger(out io.Writer) *Web {
 		Router:   NewRouter(),
 		logger:   log.New(out, log.Prefix(), log.Flags()),
 	}
-	m.SetEnv(os.Getenv("MACARON_ENV"))
+	m.SetEnv(os.Getenv("WEB_ENV"))
 	m.Router.m = m
 	m.Map(m.logger)
 	m.Map(defaultReturnHandler())
@@ -231,6 +242,7 @@ func (m *Web) createContext(rw http.ResponseWriter, req *http.Request) *Context 
 		crid:     extractCrid(req),
 		logger:   m.logger,
 	}
+	c.Resp.Header().Set(CridHeaderName, c.crid)
 	c.SetParent(m)
 	c.Map(c)
 	c.MapTo(c.Resp, (*http.ResponseWriter)(nil))

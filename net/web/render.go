@@ -484,8 +484,8 @@ func renderHandler(opt RenderOptions, tplSets []string) Handler {
 // HTML rendering. The default directory for templates is "templates" and the default
 // file extension is ".tmpl" and ".html".
 //
-// If MACARON_ENV is set to "" or "development" then templates will be recompiled on every request. For more performance, set the
-// MACARON_ENV environment variable to "production".
+// If WEB_ENV is set to "" or "development" then templates will be recompiled on every request. For more performance, set the
+// WEB_ENV environment variable to "production".
 func Renderer(options ...RenderOptions) Handler {
 	return renderHandler(prepareRenderOptions(options), []string{})
 }
