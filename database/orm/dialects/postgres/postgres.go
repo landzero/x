@@ -7,8 +7,9 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	_ "github.com/lib/pq"
-	"github.com/lib/pq/hstore"
+
+	_ "landzero.net/x/database/pq"
+	"landzero.net/x/database/pq/hstore"
 )
 
 type Hstore map[string]*string
