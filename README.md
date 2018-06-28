@@ -23,6 +23,7 @@
 | math/mshuf | original |
 | net/ivy | orignal |
 | net/netext | orignal |
+| net/oauth | https://github.com/mrjones/oauth |
 | net/reuse | https://github.com/kavu/go_reuseport |
 | net/web   | https://github.com/go-macaron/macaron and various middlewares | xxx
 | os/minit | orignal |
