@@ -16,9 +16,10 @@
 package web
 
 import (
-	"landzero.net/x/log"
 	"reflect"
 	"time"
+
+	"landzero.net/x/log"
 )
 
 // LoggerInvoker is an inject.FastInvoker wrapper of func(ctx *Context, log *log.Logger).
@@ -36,7 +37,7 @@ func Logger() Handler {
 		rw := ctx.Resp.(ResponseWriter)
 		ctx.Next()
 		g.Printf(
-			"%s %v %s %s %v",
+			"%s %v %s %s %vms",
 			ctx.CridMark(),
 			rw.Status(),
 			ctx.Req.Method,
