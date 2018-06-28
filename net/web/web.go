@@ -194,6 +194,22 @@ func Classic() *Web {
 	return m
 }
 
+// Modern creates a modern Web with some basic default middlewares:
+// web.Logger, web.Recovery, web.Static with BinFS in production, web.Renderer with BinFS in production
+func Modern() *Web {
+	m := New()
+	m.Use(Logger())
+	m.Use(Recovery())
+	m.Use(Static("public", StaticOptions{
+		BinFS: m.Env() == PROD,
+	}))
+	m.Use(Renderer(RenderOptions{
+		Directory: "views",
+		BinFS:     m.Env() == PROD,
+	}))
+	return m
+}
+
 // Handlers sets the entire middleware stack with the given Handlers.
 // This will clear any current middleware handlers,
 // and panics if any of the handlers is not a callable function
