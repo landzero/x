@@ -201,11 +201,11 @@ func Modern() *Web {
 	m.Use(Logger())
 	m.Use(Recovery())
 	m.Use(Static("public", StaticOptions{
-		BinFS: m.Env() == PROD,
+		BinFS: m.IsProduction(),
 	}))
 	m.Use(Renderer(RenderOptions{
 		Directory: "views",
-		BinFS:     m.Env() == PROD,
+		BinFS:     m.IsProduction(),
 	}))
 	return m
 }
@@ -371,6 +371,7 @@ func (m *Web) SetURLPrefix(prefix string) {
 	m.hasURLPrefix = len(m.urlPrefix) > 0
 }
 
+// SetEnv set environment
 func (m *Web) SetEnv(e string) {
 	if e == DEV || e == PROD || e == TEST {
 		m.env = e
@@ -379,8 +380,24 @@ func (m *Web) SetEnv(e string) {
 	}
 }
 
+// Env environment
 func (m *Web) Env() string {
 	return m.env
+}
+
+// IsProduction check Env() == PROD
+func (m *Web) IsProduction() bool {
+	return m.env == PROD
+}
+
+// IsDevelopment check Env() == DEV
+func (m *Web) IsDevelopment() bool {
+	return m.env == DEV
+}
+
+// IsTest check Env() == TEST
+func (m *Web) IsTest() bool {
+	return m.env == TEST
 }
 
 func init() {
