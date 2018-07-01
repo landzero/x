@@ -173,8 +173,9 @@ func (n *Node) SortedChildren() []*Node {
 
 // FileInfo creates a related os.FileInfo
 func (n *Node) FileInfo() os.FileInfo {
-	info := fileInfo{
-		name: "/" + strings.Join(n.Path, "/"),
+	info := fileInfo{}
+	if len(n.Path) > 0 {
+		info.name = n.Path[len(n.Path)-1]
 	}
 	if n.Chunk != nil {
 		info.date = n.Chunk.Date

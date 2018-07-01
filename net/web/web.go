@@ -201,11 +201,11 @@ func Modern() *Web {
 	m.Use(Logger())
 	m.Use(Recovery())
 	m.Use(Static("public", StaticOptions{
-		BinFS: m.IsProduction(),
+		BinFS: !m.IsDevelopment(),
 	}))
 	m.Use(Renderer(RenderOptions{
 		Directory: "views",
-		BinFS:     m.IsProduction(),
+		BinFS:     !m.IsDevelopment(),
 	}))
 	return m
 }

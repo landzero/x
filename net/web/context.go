@@ -19,7 +19,6 @@ import (
 	"html/template"
 	"io"
 	"io/ioutil"
-	"landzero.net/x/log"
 	"mime/multipart"
 	"net/http"
 	"net/url"
@@ -30,6 +29,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"landzero.net/x/log"
 
 	"landzero.net/x/com"
 	"landzero.net/x/net/web/inject"
@@ -109,10 +110,32 @@ func (c *Context) handler() Handler {
 	panic("invalid index for context handler")
 }
 
+// Env web.Env()
+func (c *Context) Env() string {
+	return c.env
+}
+
+// IsProduction web.Env() == PROD
+func (c *Context) IsProduction() bool {
+	return c.env == PROD
+}
+
+// IsDevelopment web.Env() == DEV
+func (c *Context) IsDevelopment() bool {
+	return c.env == DEV
+}
+
+// IsTest web.Env() == TEST
+func (c *Context) IsTest() bool {
+	return c.env == TEST
+}
+
+// Crid correlation id
 func (c *Context) Crid() string {
 	return c.crid
 }
 
+// CridMark correlation id in format CRID[XXXXXXXX]
 func (c *Context) CridMark() string {
 	return "CRID[" + c.Crid() + "]"
 }

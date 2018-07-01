@@ -55,6 +55,9 @@ var (
 
 	// Included helper functions for use when rendering html
 	helperFuncs = template.FuncMap{
+		"t": func() (string, error) {
+			return "", fmt.Errorf("t called with out i18n middleware injected")
+		},
 		"yield": func() (string, error) {
 			return "", fmt.Errorf("yield called with no layout defined")
 		},
@@ -603,6 +606,24 @@ func (r *TplRender) addYield(t *template.Template, tplName string, data interfac
 	t.Funcs(funcs)
 }
 
+// i18n interface mirroring i18n.I18n
+type i18n interface {
+	T(key string, args ...string) string
+}
+
+func (r *TplRender) addI18n(t *template.Template, data interface{}) {
+	if m, ok := data.(map[string]interface{}); ok {
+		if in, ok := m["I18n"].(i18n); ok {
+			funcs := template.FuncMap{
+				"t": func(key string, args ...string) string {
+					return in.T(key, args...)
+				},
+			}
+			t.Funcs(funcs)
+		}
+	}
+}
+
 func (r *TplRender) renderBytes(setName, tplName string, data interface{}, htmlOpt ...HTMLOptions) (*bytes.Buffer, error) {
 	t := r.TemplateSet.Get(setName)
 	if r.env == DEV {
@@ -615,6 +636,8 @@ func (r *TplRender) renderBytes(setName, tplName string, data interface{}, htmlO
 	}
 
 	opt := r.prepareHTMLOptions(htmlOpt)
+
+	r.addI18n(t, data)
 
 	if len(opt.Layout) > 0 {
 		r.addYield(t, tplName, data)
