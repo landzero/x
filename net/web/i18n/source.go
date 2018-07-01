@@ -28,9 +28,7 @@ type Source struct {
 func flatten(pfx string, in map[interface{}]interface{}, out map[string]string) {
 	for key, val := range in {
 		keyStr := com.ToStr(key)
-		if valStr, ok := val.(string); ok {
-			out[pfx+keyStr] = valStr
-		} else if valMap, ok := val.(map[interface{}]interface{}); ok {
+		if valMap, ok := val.(map[interface{}]interface{}); ok {
 			flatten(pfx+keyStr+".", valMap, out)
 		} else {
 			out[pfx+keyStr] = com.ToStr(val)
