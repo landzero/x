@@ -54,7 +54,7 @@ func (in *i18n) setup() {
 		in.mch,
 		in.ctx.GetCookie(in.opt.CookieName),
 		in.ctx.Query(in.opt.QueryName),
-		in.ctx.Header().Get("Accept-Language"),
+		in.ctx.Req.Header.Get("Accept-Language"),
 	)
 	in.l = lang.String()
 	in.ctx.MapTo(in, (*I18n)(nil))
