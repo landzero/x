@@ -6,6 +6,7 @@
 
 | Package | Upstream | Modified |
 |---------|----------|----------|
+| container/sack | orignal |
 | com     | https://github.com/Unknwon/com | x
 | database/mysql | https://github.com/go-sql-driver/mysql |
 | database/orm | https://github.com/jinzhu/gorm | x
