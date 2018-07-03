@@ -6,8 +6,11 @@ import (
 	"net/url"
 )
 
-// Handler arc handler
-type Handler func(ctx *Context)
+// Handler arc handler, initialized per request
+type Handler func(*Context)
+
+// Installer arc installer, once initialized
+type Installer func(*Arc)
 
 // Arc application
 type Arc struct {
@@ -22,6 +25,11 @@ func New() (a *Arc) {
 		handlers: []Handler{},
 	}
 	return
+}
+
+// Install install static values
+func (a *Arc) Install(i Installer) {
+	i(a)
 }
 
 // Use add multiple handlers
