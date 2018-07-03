@@ -23,6 +23,7 @@
 | log    | standard library "log" | xx
 | math/mshuf | original |
 | net/http/httpext | orignal |
+| net/arc | orignal |
 | net/ivy | orignal |
 | net/netext | orignal |
 | net/oauth | https://github.com/mrjones/oauth |
